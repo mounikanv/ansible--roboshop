@@ -1,0 +1,13 @@
+- name: configure mongodb server
+  become: yes
+  hosts: mongodb
+  tasks:
+   - name: mongodb.repo
+     ansibile.builtin.copy:
+      src: mongo.repo
+      dest: /etc/yum.repos.d/mongo.repp
+   - name: install mongodb server
+     ansible.biultin.dnf:
+      name: mongodb-org
+      state: present
+  
