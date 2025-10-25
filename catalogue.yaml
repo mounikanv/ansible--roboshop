@@ -42,13 +42,13 @@
    
    - name: Install dependencies
      community.general.npm:
-     path: /app/location
+      path: /app
    
    - name: copy catalogue service to system directory
      ansible.builtin.copy:
-     src: catalogue.service
-     dest: /etc/systemd/system/catalogue.service
-     remote_src: yes
+      src: catalogue.service
+      dest: /etc/systemd/system/catalogue.service
+      remote_src: yes
     
    - name: system ctl demon reload
      ansible.builtin.systemd_service:
