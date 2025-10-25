@@ -9,12 +9,12 @@
      ansible.builtin.command:dnf module enable nodejs:20 -y:
 
    - name: install nodejs server
-     ansibile.builtin.dnf:
+     ansible.builtin.dnf:
       name: nodejs
       state: present
 
    - name: creat app directory
-     ansibile.builtin.file:
+     ansible.builtin.file:
       path: /app
       state: directory
 
@@ -26,7 +26,7 @@
       home: /app  
 
    - name: download the catalogue code
-     ansibile.builtin.get_url:
+     ansible.builtin.get_url:
      url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
      path: unzip /tmp/catalogue.zip
 
