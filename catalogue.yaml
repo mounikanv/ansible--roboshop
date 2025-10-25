@@ -27,9 +27,8 @@
 
    - name: download the catalogue code
      ansible.builtin.get_url:
-
-     url:  https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
-     path: unzip /tmp/catalogue.zip
+      url:  https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
+      path: unzip /tmp/catalogue.zip
 
 
   # this module thinks file exist on ansible control server, needs to extract on to remote machine
