@@ -44,11 +44,12 @@
      community.general.npm:
       path: /app
    
+  
    - name: copy catalogue service to system directory
      ansible.builtin.copy:
       src: catalogue.service
       dest: /etc/systemd/system/catalogue.service
-      
+
     
    - name: system ctl demon reload
      ansible.builtin.systemd_service:
