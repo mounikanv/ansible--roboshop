@@ -24,13 +24,13 @@
       shell: /sbin/nologin
       system: true
       home: /app  
-
-   - name: download the catalogue code
+      
+   - name: download catalogue code
      ansible.builtin.get_url:
-      url:  https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
-      path: unzip /tmp/catalogue.zip
+      url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
+      dest: /tmp/catalogue.zip
 
-
+   
   # this module thinks file exist on ansible control server, needs to extract on to remote machine
   # remote_src: yes means files already exist in catalogue server
 
@@ -59,6 +59,7 @@
       name: catalogue
       state: started
       enabled: yes
+
    - name: copy catalogue service to system directory
      ansible.builtin.copy:
       src: catalogue.service
