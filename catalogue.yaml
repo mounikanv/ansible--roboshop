@@ -59,11 +59,11 @@
       name: catalogue
       state: started
       enabled: yes
-
-   - name: copy mongodb repo
+   - name: copy catalogue service to system directory
      ansible.builtin.copy:
-      src: mongo.repo
-      dest: /etc/yum.repos.d/mongo.repo
+      src: catalogue.service
+      dest: /etc/systemd/system/catalogue.service
+   
 
    - name: install mongodb client
      ansible.builtin.dnf:
