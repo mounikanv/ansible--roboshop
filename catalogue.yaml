@@ -1,7 +1,7 @@
 - name: configure catalogue component
   hosts: catalogue
   become: yes
-  task:
+  tasks:
    - name: disable default nodejs
      ansibile.builtin.command:dnf module disable nodejs -y:
 
