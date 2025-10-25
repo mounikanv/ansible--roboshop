@@ -24,7 +24,7 @@
       shell: /sbin/nologin
       system: true
       home: /app  
-      
+
    - name: download catalogue code
      ansible.builtin.get_url:
       url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
@@ -48,7 +48,7 @@
      ansible.builtin.copy:
       src: catalogue.service
       dest: /etc/systemd/system/catalogue.service
-      remote_src: yes
+      
     
    - name: system ctl demon reload
      ansible.builtin.systemd_service:
