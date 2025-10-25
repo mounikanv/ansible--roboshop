@@ -1,5 +1,5 @@
-- name: configure catalogue component
-  hosts: catalogue
+- name: configure user component
+  hosts: user
   become: yes
   task:
    - name: disable default nodejs
@@ -25,17 +25,17 @@
       system: true
       home: /app  
 
-   - name: download the catalogue code
+   - name: download the user code
      ansibile.builtin.get_url:
-     url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
-     path: unzip /tmp/catalogue.zip
+     url: https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip
+     path: unzip /tmp/user.zip
 
 
   # this module thinks file exist on ansible control server, needs to extract on to remote machine
-  # remote_src: yes means files already exist in catalogue server
-   - name: extract catalogue code
+  # remote_src: yes means files already exist in user server
+   - name: extract user code
      ansible.builtin.unarchive:
-      src: /tmp/catalogue.zip
+      src: /tmp/user.zip
       dest: /app
       remote_src: yes
    
@@ -43,19 +43,19 @@
      community.general.npm:
      path: /app/location
    
-   - name: copy catalogue service to system directory
+   - name: copy user service to system directory
      ansible.builtin.copy:
-     src: catalogue.service
-     dest: /etc/systemd/system/catalogue.service
+     src: user.service
+     dest: /etc/systemd/system/user.service
      remote_src: yes
     
    - name: system ctl demon reload
      ansible.builtin.systemd_service:
       daemon_reload: true
 
-   - name: start and enable catalogue
+   - name: start and enable user
      ansible.builtin.service:
-      name: catalogue
+      name: user
       state: started
       enabled: yes
    - name: copy mongodb repo
@@ -70,16 +70,16 @@
 
    - name: check products loaded or not
      ansible.builtin.command: mongosh --host mongodb.daws84s.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")'
-     register: catalogue_output    
+     register: user_output    
 
 
-   - name: print catalogue output
+   - name: print user output
      ansible.builtin.debug:
-      msg: "{{ catalogue_output }}"
+      msg: "{{ user_output }}"
 
    - name: load products
      ansible.builtin.shell: mongosh --host mongodb.daws84s.site < /app/db/master-data.js
-     when: catalogue_output.stdout | int < 0
+     when: user_output.stdout | int < 0
    
 
 
