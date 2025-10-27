@@ -13,7 +13,7 @@
    - name: install redis
      ansible.builtin.dnf:
        name: redis
-       state: presant
+       state: present
        
   
    - name: allow remote conncetion
