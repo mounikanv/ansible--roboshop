@@ -47,7 +47,7 @@
      ansible.builtin.copy:
       src: user.service
       dest: /etc/systemd/system/user.service
-      remote_src: yes
+      
     
    - name: system ctl demon reload
      ansible.builtin.systemd_service:
@@ -58,6 +58,7 @@
       name: user
       state: started
       enabled: yes
+      
    - name: copy mongodb repo
      ansible.builtin.copy:
       src: mongo.repo
