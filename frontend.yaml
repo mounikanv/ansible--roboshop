@@ -1,7 +1,7 @@
 - name: configutre frontend component
   hosts: frontend
   become: yes
-  task:
+  tasks:
    - name: disable default nginx
      ansibile.builtin.component: dnf module disable nginx -y
 
