@@ -31,8 +31,9 @@
 
    - name: download the frontend code
      ansible.builtin.get_url:
-       curl:  https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
+       url:  https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
        dest: /tmp/frontend.zip
+        
 
    - name: Unarchive a file that needs to be downloaded (added in 2.0)
      ansible.builtin.unarchive:
