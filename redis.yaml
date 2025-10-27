@@ -11,7 +11,7 @@
 
   
    - name: install redis
-     ansibile.builtin.dnf:
+     ansible.builtin.dnf:
        name: redis
        state: presant
        
