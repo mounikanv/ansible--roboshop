@@ -1,7 +1,7 @@
 - name: install redis components
   hosts: redis
   become: yes
-  task:
+  tasks:
    - name: disable redis default module                         
      ansibile.builtin.command:dnf module disable redis -y:
 
