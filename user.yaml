@@ -41,7 +41,7 @@
    
    - name: Install dependencies
      community.general.npm:
-     path: /app/location
+      path: /app/location
    
    - name: copy user service to system directory
      ansible.builtin.copy:
