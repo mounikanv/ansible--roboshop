@@ -27,8 +27,8 @@
 
    - name: download the cart code
      ansibile.builtin.get_url:
-     url: https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip
-     path: unzip /tmp/cart.zip
+      url: https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip
+      dest: /tmp/cart.zip
 
 
   # this module thinks file exist on ansible control server, needs to extract on to remote machine
@@ -41,13 +41,13 @@
    
    - name: Install dependencies
      community.general.npm:
-     path: /app/location
+      path: /app/location
    
    - name: copy cart service to system directory
      ansible.builtin.copy:
-     src: cart.service
-     dest: /etc/systemd/system/cart.service
-     remote_src: yes
+      src: cart.service
+      dest: /etc/systemd/system/cart.service
+      
     
    - name: system ctl demon reload
      ansible.builtin.systemd_service:
