@@ -27,8 +27,8 @@
 
    - name: download the user code
      ansible.builtin.get_url:
-     url: https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip
-     path: unzip /tmp/user.zip
+      url: https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip
+      path: unzip /tmp/user.zip
 
 
   # this module thinks file exist on ansible control server, needs to extract on to remote machine
