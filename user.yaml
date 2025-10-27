@@ -70,7 +70,7 @@
       state: present
 
    - name: check products loaded or not
-     ansible.builtin.command: mongosh --host mongodb.daws84s.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")'
+     ansible.builtin.command: mongosh --host mongodb.mounika.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")'
      register: user_output    
 
 
@@ -79,7 +79,7 @@
       msg: "{{ user_output }}"
 
    - name: load products
-     ansible.builtin.shell: mongosh --host mongodb.daws84s.site < /app/db/master-data.js
+     ansible.builtin.shell: mongosh --host mongodb.mounika.site < /app/db/master-data.js
      when: user_output.stdout | int < 0
    
 
