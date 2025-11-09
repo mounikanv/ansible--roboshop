@@ -1,4 +1,4 @@
-- name: configur shipping component
+- name: configure shipping component
   hosts: shipping
   become: yes
   tasks:
