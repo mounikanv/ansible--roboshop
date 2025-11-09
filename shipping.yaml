@@ -1,103 +1,61 @@
-- name: configure shipping component
-  hosts: shipping
+- name: conigure payment server
   become: yes
+  hosts: payment
   tasks:
-   - name: installed maven and mysql
-     ansible.builtin.dnf:
-      name: "{ item }"
+  - name: install python3 packages
+    ansible.builtin.dnf:
+      name: "{{ item }}"
       state: installed
-     loop:
-      - mysql
-      - maven
+    loop:
+    - python3 
+    - gcc 
+    - python3-devel
 
-   - name: install PyMySQL and cryptography 
-     ansible.builtin.pip:
-      name: "{ item }"
-      executable: pip3.9
-     loops:
-      -  PyMySQL
-      -  cryptograph
-   - name: create app directory
-     ansible.builtin.file:
+  - name: create app directory
+    ansible.builtin.file:
       path: /app
       state: directory
 
-   - name: create roboshop system user
-     ansible.builtin.user:
+  - name: create roboshop system user
+    ansible.builtin.user:
       name: roboshop
       shell: /sbin/nologin
       system: true
       home: /app
 
-   - name: download shipping code
-     ansible.builtin.get_url:
-      url: https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip 
-      dest: /tmp/shipping.zip
+  - name: download payment code
+    ansible.builtin.get_url:
+      url: https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip 
+      dest: /tmp/payment.zip
 
-  # this module thinks file exist on ansible control server, needs to extract on to remote machine
-  # remote_src: yes means files already exist in catalogue server
-   - name: extract shipping code
-     ansible.builtin.unarchive:
-      src: /tmp/shipping.zip
+  - name: extract payment code
+    ansible.builtin.unarchive:
+      src: /tmp/payment.zip
       dest: /app
       remote_src: yes
 
-   - name: install maven dependencies
-     ansible.builtin.command: mvn clean package 
-     args:
+  - name: install dependencies
+    ansible.builtin.pip:
+      requirements: requirements.txt
+      executable: pip3.9
+    args:
       chdir: /app
 
-   - name: rename jar files 
-     ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar
-     args:
-      chdir: /app
+  - name: copy payment service
+    ansible.builtin.copy:
+      src: payment.service
+      dest: /etc/systemd/system/payment.service
 
-   - name: copy shipping services
-     ansible.builtin.copy:
-       src: shipping.service
-       dest: /etc/systemd/system/shipping.service
+  - name: daemon reload
+    ansible.builtin.systemd_service:
+      daemon_reload: true
 
-   - name: demon reload
-     ansible.builtin.systemd_service:
-       daemon_reload: true
+  - name: enable and start payment
+    ansible.builtin.service:
+      name: payment
+      state: started
+      enabled: yes
 
-   - name: enable and start
-     ansibile.builtin.service:
-       name: shipping
-       state: started
-       enable: yes  
-   - name: impor data
-     tags:
-      - import:
-        community..mysql.mysql_db:
-        name: all
-        login_user: root
-        login_password: RoboShop@1
-        login_host: mounika.site
-        state: import
-        target: "{{ item }}"
-     loop:
-     - /app/db/schema.sql
-     - /app/db/app-user.sql
-     - /app/db/master-data.sql
 
-   - name: restart shipping
-     tags:
-      - import:
-     ansible.builtin.service:
-      state: restarted
-      name: shipping
   
-
-
-   
-      
-
-
-    
-   
-
-
-
-
- 
+  
