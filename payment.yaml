@@ -22,10 +22,12 @@
       system: true
       home: /app
       
-- name: Download payment code
-  ansible.builtin.get_url:
-     url: https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip 
-     dest: /tmp/payment.zip
+   - name: download payment code
+     ansible.builtin.get_url:
+      url: https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip 
+      dest: /tmp/payment.zip
+
+
       
 - name: extract payment code
   ansible.builtin.unarchive:
