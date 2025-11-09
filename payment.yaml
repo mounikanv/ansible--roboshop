@@ -3,7 +3,7 @@
   become: yes
   tasks:
    - name: install python 3 packages
-     ansibile.builtin.dnf:
+     ansible.builtin.dnf:
       name: "{ items }"
       state: installed
 
