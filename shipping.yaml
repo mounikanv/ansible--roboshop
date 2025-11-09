@@ -1,15 +1,22 @@
-- name: conigure payment server
+- name: configure shipping component
+  hosts: shipping
   become: yes
-  hosts: payment
   tasks:
-  - name: install python3 packages
+  - name: install maven and mysql
     ansible.builtin.dnf:
       name: "{{ item }}"
       state: installed
     loop:
-    - python3 
-    - gcc 
-    - python3-devel
+    - maven
+    - mysql
+    
+  - name: install PyMySQL and cryptography 
+    ansible.builtin.pip:
+      name: "{{ item }}"
+      executable: pip3.9
+    loop:
+    - cryptography
+    - PyMySQL
 
   - name: create app directory
     ansible.builtin.file:
@@ -23,39 +30,71 @@
       system: true
       home: /app
 
-  - name: download payment code
+  - name: download shipping code
     ansible.builtin.get_url:
-      url: https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip 
-      dest: /tmp/payment.zip
+      url: https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip 
+      dest: /tmp/shipping.zip
 
-  - name: extract payment code
+  - name: extract shipping code
     ansible.builtin.unarchive:
-      src: /tmp/payment.zip
+      src: /tmp/shipping.zip
       dest: /app
       remote_src: yes
 
-  - name: install dependencies
-    ansible.builtin.pip:
-      requirements: requirements.txt
-      executable: pip3.9
+  - name: install maven dependencies
+    ansible.builtin.command: mvn clean package
     args:
       chdir: /app
 
-  - name: copy payment service
+  - name: rename jar file
+    ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar
+    args:
+      chdir: /app
+
+  - name: copy shipping service
     ansible.builtin.copy:
-      src: payment.service
-      dest: /etc/systemd/system/payment.service
+      src: shipping.service
+      dest: /etc/systemd/system/shipping.service
 
   - name: daemon reload
     ansible.builtin.systemd_service:
       daemon_reload: true
 
-  - name: enable and start payment
+  - name: enable and start shipping
     ansible.builtin.service:
-      name: payment
+      name: shipping
       state: started
       enabled: yes
 
+  # - name: connect to mysql using app user
+  #   community.mysql.mysql_info:
+  #     login_user: shipping
+  #     login_password: RoboShop@1
+  #     login_host: mysql.daws84s.site
+  #     login_db: cities
 
+  - name: import data
+    tags:
+    - import
+    community.mysql.mysql_db:
+      name: all
+      login_user: root
+      login_password: RoboShop@1
+      login_host: mysql.daws84s.site
+      state: import
+      target: "{{ item }}"
+    loop:
+    - /app/db/schema.sql
+    - /app/db/app-user.sql
+    - /app/db/master-data.sql
+
+  - name: restart shipping
+    tags:
+    - import
+    ansible.builtin.service:
+      state: restarted
+      name: shipping
   
+
+
   
