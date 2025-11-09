@@ -7,7 +7,7 @@
       name: "{ items }"
       state: present
 
-      loops:
+      loop:
       - phython
       - gccc
       - python3-devel
