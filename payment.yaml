@@ -5,7 +5,7 @@
    - name: install python 3 packages
      ansible.builtin.dnf:
       name: "{ items }"
-      state: installed
+      state: present
 
       loops:
       - phython
